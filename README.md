@@ -9,11 +9,15 @@ Analysis of City of Calgary building permits (1999–2026, 503,495 records) foll
 | `scripts/clean_permits.py` | Process: clean the data for Power BI |
 | `dax/measures.dax` | Analyze: calendar table and measures |
 | `scripts/verify_findings.py` | Analyze: checks the Power BI numbers with pandas |
-| `calgary_permits.pbix` | The Power BI report (35 MB, includes the data) |
+| `calgary_permits.pbix` | The Power BI report (28 MB, includes the cleaned data) |
 | `images/` | Screenshots of the five report pages |
-| `data/raw/`, `data/processed/` | CSVs, git-ignored (over GitHub's 100 MB limit) |
+| `data/processed/building_permits_clean.zip` | The cleaned data (20 MB zipped, 503,495 rows, 20 columns) |
+| `data/raw/` | Put the raw download here; git-ignored (330 MB, over GitHub's 100 MB limit) |
 
 ## Reproduce
+**Quick start (cleaned data included):** unzip `data/processed/building_permits_clean.zip` in the same folder, then load the CSV in Power BI and add the DAX below.
+
+**From the raw download:**
 ```bash
 pip install -r requirements.txt            # pandas, numpy
 # put Building_Permits_20261106.csv (City of Calgary Open Data) in data/raw/

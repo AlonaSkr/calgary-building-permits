@@ -1,6 +1,7 @@
-# Raw/processed data exceeds GitHub's 100 MB file limit; re-download from City of Calgary Open Data
+# Raw/processed CSVs exceed GitHub's 100 MB file limit. Only the zipped cleaned CSV is committed.
 data/raw/*
 data/processed/*
 !data/**/.gitkeep
+!data/processed/building_permits_clean.zip
 *.pbix.bak
 .DS_Store
