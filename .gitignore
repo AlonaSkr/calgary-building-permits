@@ -1,0 +1,6 @@
+# Raw/processed data exceeds GitHub's 100 MB file limit; re-download from City of Calgary Open Data
+data/raw/*
+data/processed/*
+!data/**/.gitkeep
+*.pbix.bak
+.DS_Store

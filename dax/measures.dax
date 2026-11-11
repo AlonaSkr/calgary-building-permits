@@ -1,0 +1,89 @@
+// DAX for Power BI. Tables: Permits (the cleaned CSV) and Calendar (made below).
+// Relationships: Calendar[Date] -> Permits[AppliedDate]  (active)
+//                Calendar[Date] -> Permits[IssuedDate]   (inactive)
+// Do the parts in order: 1) Calendar, 2) calculated columns, 3) measures.
+
+
+// ===== 1. CALENDAR TABLE (Modeling > New table) =====
+Calendar =
+ADDCOLUMNS (
+    CALENDAR ( DATE ( 1999, 1, 1 ), DATE ( 2026, 12, 31 ) ),
+    "Year", YEAR ( [Date] ),
+    "Month Number", MONTH ( [Date] ),
+    "Month", FORMAT ( [Date], "mmm" ),
+    "Year-Month", FORMAT ( [Date], "yyyy-mm" )
+)
+
+
+// ===== 2. CALCULATED COLUMNS (Modeling > New column, in the Permits table) =====
+// Days between applying and being issued.
+// Rows with a missing date or dates in the wrong order are left blank.
+Days To Issue =
+IF (
+    NOT ISBLANK ( Permits[IssuedDate] ) && Permits[IssuedDate] >= Permits[AppliedDate],
+    DATEDIFF ( Permits[AppliedDate], Permits[IssuedDate], DAY )
+)
+
+// Days between being issued and being completed (same rules)
+Days Issue To Complete =
+IF (
+    NOT ISBLANK ( Permits[CompletedDate] )
+        && NOT ISBLANK ( Permits[IssuedDate] )
+        && Permits[CompletedDate] >= Permits[IssuedDate],
+    DATEDIFF ( Permits[IssuedDate], Permits[CompletedDate], DAY )
+)
+
+// Project cost, but negative costs are left blank
+Valid Cost =
+IF ( Permits[EstProjectCost] >= 0, Permits[EstProjectCost] )
+
+
+// ===== 3. MEASURES (Modeling > New measure) =====
+
+// --- How many permits ---
+Permits = DISTINCTCOUNT ( Permits[PermitNum] )
+
+Permits Last Year = CALCULATE ( [Permits], SAMEPERIODLASTYEAR ( 'Calendar'[Date] ) )
+
+Permits YoY % = DIVIDE ( [Permits] - [Permits Last Year], [Permits Last Year] )
+
+// --- How much money ---
+Total Est Cost = SUM ( Permits[Valid Cost] )
+
+Average Est Cost = AVERAGE ( Permits[Valid Cost] )
+
+Median Est Cost = MEDIAN ( Permits[Valid Cost] )
+
+// --- Housing ---
+Housing Units = SUM ( Permits[HousingUnits] )
+
+New Housing Units =
+CALCULATE (
+    [Housing Units],
+    Permits[WorkClassMapped] = "New",
+    Permits[PermitClassMapped] = "Residential"
+)
+
+// --- How long it takes ---
+Avg Days To Issue = AVERAGE ( Permits[Days To Issue] )
+
+Median Days To Issue = MEDIAN ( Permits[Days To Issue] )
+
+Avg Days Issue To Complete = AVERAGE ( Permits[Days Issue To Complete] )
+
+// --- Cancelled or expired ---
+Cancelled Or Expired =
+CALCULATE ( [Permits], Permits[StatusCurrent] IN { "Cancelled", "Expired" } )
+
+Cancel Expire Rate % = DIVIDE ( [Cancelled Or Expired], [Permits] )
+
+// --- Mix and communities ---
+Residential Share % =
+DIVIDE ( CALCULATE ( [Permits], Permits[PermitClassMapped] = "Residential" ), [Permits] )
+
+// Share of all permits that are in the community on the visual
+Community Share % =
+DIVIDE ( [Permits], CALCULATE ( [Permits], ALL ( Permits[CommunityName] ) ) )
+
+// 1 = community with the most permits
+Community Rank = RANKX ( ALL ( Permits[CommunityName] ), [Permits], , DESC )
