@@ -10,7 +10,7 @@ Analysis of City of Calgary building permits (1999–2026, 503,495 records) foll
 | `dax/measures.dax` | Analyze: calendar table and measures |
 | `scripts/verify_findings.py` | Analyze: checks the Power BI numbers with pandas |
 | `calgary_permits.pbix` | The Power BI report (28 MB, includes the cleaned data) |
-| `images/` | Screenshots of the five report pages |
+| `images/` | Screenshots of the six report pages |
 | `data/processed/building_permits_clean.zip` | The cleaned data (20 MB zipped, 503,495 rows, 20 columns) |
 | `data/raw/` | Put the raw download here; git-ignored (330 MB, over GitHub's 100 MB limit) |
 
@@ -405,15 +405,16 @@ Numbers come from `scripts/verify_findings.py` on the cleaned file and match the
 - Growth has moved outward. Saddle Ridge, Cranston and Panorama Hills lead over all years, but 31 communities had their first new-housing permit in 2015 or later, and several of them now lead: Cornerstone, Livingston, Carrington, Belmont and Rangeview (2,125 units).
 
 ## 5. Share
-The report is `calgary_permits.pbix`. Open it with Power BI Desktop (Windows only). It has five pages, each with a Year slicer, and the tables and measures are the ones in `dax/measures.dax`.
+The report is `calgary_permits.pbix`. Open it with Power BI Desktop (Windows only). It has six pages. The Overview page has Year, Community and Permit type slicers; the others have a Year slicer. The tables and measures are the ones in `dax/measures.dax`.
 
 | Page | Answers | Screenshot |
 |---|---|---|
-| Trends | Q1 permits and cost over time | ![Trends](images/1_trends.png) |
-| Processing time | Q2 days to issue and to complete | ![Processing time](images/2_processing_time.png) |
-| Communities | Q3 and Q6 where new housing is built | ![Communities](images/3_communities.png) |
-| Outcomes | Q4 cancelled and expired permits | ![Outcomes](images/4_outcomes.png) |
-| Mix | Q5 residential share and new vs existing work | ![Mix](images/5_mix.png) |
+| Overview | Headline numbers, permit types, cost and volume by year, top communities | ![Overview](images/1_overview.png) |
+| Trends | Q1 permits and cost over time | ![Trends](images/2_trends.png) |
+| Processing time | Q2 days to issue and to complete | ![Processing time](images/3_processing_time.png) |
+| Communities | Q3 and Q6 where new housing is built | ![Communities](images/4_communities.png) |
+| Outcomes | Q4 cancelled and expired permits | ![Outcomes](images/5_outcomes.png) |
+| Mix | Q5 residential share and new vs existing work | ![Mix](images/6_mix.png) |
 
 **Limits to state when presenting**
 - Costs and square footage are applicant estimates and are not adjusted for inflation.
