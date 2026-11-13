@@ -32,7 +32,7 @@ Then load the cleaned CSV in Power BI and add the DAX below.
 ## 1. Ask
 **Business task:** describe how Calgary building permit volume, value and processing time have changed over time, by community and by permit type, for a city-planning / construction-industry audience.
 
-**Questions** (draft – edit to match your goals):
+**Questions:**
 1. How have permit applications and total estimated project cost trended by year and month?
 2. How long does it take from application to issuance, and from issuance to completion? Is it getting slower?
 3. Which communities and permit types drive most new housing units?
@@ -193,14 +193,14 @@ print("Saved", clean_file)
 ## 4. Analyze
 Load `building_permits_clean.csv` into Power BI as table `Permits` (dates = Date, cost/sqft = Fixed decimal, units = Whole number). Add the calendar table and calculated columns from the DAX below, then relate `Calendar[Date]` → `Permits[AppliedDate]` (active) and → `Permits[IssuedDate]` (inactive, used via `USERELATIONSHIP`).
 
-| Question | Suggested visuals | Measures |
+| Question | Visuals in the report | Measures |
 |---|---|---|
-| 1 Trends | Line by Year-Month, YoY cards | `Permits`, `Total Est Cost`, `Permits YoY %` |
+| 1 Trends | Line by month and by year, bars of total and median cost by year, 100% stacked permit types | `Permits`, `Total Est Cost`, `Median Est Cost` |
 | 2 Processing time | Line by year, bar by permit type | `Median Days To Issue`, `Avg Days Issue To Complete` |
-| 3 Communities | Map (Latitude/Longitude), top-N bar | `New Housing Units`, `Community Rank` |
-| 4 Outcomes | Stacked bar by status, trend | `Cancel Expire Rate %` |
-| 5 Mix | 100% stacked by year | `Residential Share %`, `Permits` by `WorkClassMapped` |
-| 6 Neighbourhood growth | Small multiples / line by community and year, top-N bar, map | `New Housing Units`, `Total Est Cost`, `Community Rank`, `Community Share %` |
+| 3 Communities | Top-10 bar, scatter of Latitude/Longitude sized by units | `New Housing Units`, `Community Rank` |
+| 4 Outcomes | Bar by status, bar by permit type, line by year | `Cancel Expire Rate %` |
+| 5 Mix | Line of residential share, 100% stacked by year | `Residential Share %`, `Permits` by `PermitClassMapped` and `WorkClassMapped` |
+| 6 Neighbourhood growth | Line by year for the top 10 communities, top-10 bar, scatter | `New Housing Units`, `Community Rank`, `Community Share %` |
 
 Code used – `dax/measures.dax`:
 ```dax
